@@ -8,15 +8,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@NoArgsConstructor
+@NoArgsConstructor
 public class AnalisarPosPropostaMessage implements Serializable {
 
     private static final long serialVersionUID = 1551144123659589882L;
 
+    private String cpf;
+
+    private Long numeroProposta;
 }

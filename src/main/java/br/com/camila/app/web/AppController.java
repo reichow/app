@@ -77,7 +77,9 @@ public class AppController {
     @PostMapping("/analisa-pos-proposta")
     public void analisarPosProposta(@RequestBody AnalisarPosPropostaRequest request) {
 
-        AnalisarPosPropostaMessage message = AnalisarPosPropostaMessage.builder().build();
+        AnalisarPosPropostaMessage message = AnalisarPosPropostaMessage.builder()
+            .cpf(request.getCpf())
+            .numeroProposta(request.getNumeroProposta()).build();
 
         eventTemplate.convertAndSend(
             Messaging.ANALISAR_POS_PROPOSTA.getExchange(),
