@@ -1,4 +1,4 @@
-package br.com.camila.app.message;
+package br.com.camila.app.request;
 
 import java.io.Serializable;
 
@@ -7,19 +7,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import br.com.camila.app.domain.TipoProposta;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class AtualizarEmailValidadoMessage implements Serializable {
+public class AnalisarPrePropostaMcRequest implements Serializable {
 
-    private static final long serialVersionUID = -2096907663175471870L;
+    private static final long serialVersionUID = -4693824107761654994L;
 
     private String cpf;
 

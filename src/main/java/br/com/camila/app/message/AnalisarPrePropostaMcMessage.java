@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class AtualizarEmailValidadoMessage implements Serializable {
+public class AnalisarPrePropostaMcMessage implements Serializable {
 
-    private static final long serialVersionUID = -2096907663175471870L;
+    private static final long serialVersionUID = -222740039185352587L;
 
     private String cpf;
 

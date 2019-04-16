@@ -3,18 +3,24 @@ package br.com.camila.app.web;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.camila.app.annotation.EventTemplate;
+import br.com.camila.app.entity.Proposta;
 import br.com.camila.app.message.AnalisarPosPropostaMessage;
+import br.com.camila.app.message.AnalisarPrePropostaMcMessage;
 import br.com.camila.app.message.AnalisarPrePropostaMessage;
 import br.com.camila.app.message.AtualizarEmailValidadoMessage;
 import br.com.camila.app.message.AtualizarInfosPessoaisMessage;
 import br.com.camila.app.message.CriarPropostaMessage;
 import br.com.camila.app.messaging.Messaging;
+import br.com.camila.app.repository.PropostaRepository;
 import br.com.camila.app.request.AnalisarPosPropostaRequest;
+import br.com.camila.app.request.AnalisarPrePropostaMcRequest;
 import br.com.camila.app.request.AnalisarPrePropostaRequest;
 import br.com.camila.app.request.AtualizarEmailValidadoRequest;
 import br.com.camila.app.request.AtualizarInfosPessoaisRequest;
@@ -28,10 +34,15 @@ public class AppController {
     @EventTemplate
     private RabbitTemplate eventTemplate;
 
+    @Autowired
+    private PropostaRepository repository;
+
     @PostMapping("/cria-proposta")
     public void criarProposta(@RequestBody CriarPropostaRequest request) {
 
-        CriarPropostaMessage message = CriarPropostaMessage.builder().cpf(request.getCpf()).build();
+        CriarPropostaMessage message = CriarPropostaMessage.builder()
+            .cpf(request.getCpf())
+            .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
             Messaging.CRIAR_PROPOSTA.getExchange(),
@@ -44,7 +55,8 @@ public class AppController {
 
         AnalisarPrePropostaMessage message = AnalisarPrePropostaMessage.builder()
             .cpf(request.getCpf())
-            .numeroProposta(request.getNumeroProposta()).build();
+            .numeroProposta(request.getNumeroProposta())
+            .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
             Messaging.ANALISAR_PRE_PROPOSTA.getExchange(),
@@ -52,10 +64,26 @@ public class AppController {
             message);
     }
 
+    @PostMapping("/analisa-pre-proposta-mc")
+    public void analisarPrePropostaMc(@RequestBody AnalisarPrePropostaMcRequest request) {
+
+        AnalisarPrePropostaMcMessage message = AnalisarPrePropostaMcMessage.builder()
+            .cpf(request.getCpf())
+            .numeroProposta(request.getNumeroProposta())
+            .proposta(request.getProposta()).build();
+
+        eventTemplate.convertAndSend(
+            Messaging.ANALISAR_PRE_PROPOSTA_MC.getExchange(),
+            Messaging.ANALISAR_PRE_PROPOSTA_MC.getRoutingKey(),
+            message);
+    }
+
     @PostMapping("/atualiza-infos-pessoais")
     public void atualizarInfosPessoais(@RequestBody AtualizarInfosPessoaisRequest request) {
 
-        AtualizarInfosPessoaisMessage message= AtualizarInfosPessoaisMessage.builder().build();
+        AtualizarInfosPessoaisMessage message= AtualizarInfosPessoaisMessage.builder()
+            .numeroProposta(request.getNumeroProposta())
+            .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
             Messaging.ATUALIZAR_INFOS_PESSOAIS.getExchange(),
@@ -66,7 +94,9 @@ public class AppController {
     @PostMapping("/atualiza-email-validado")
     public void atualizarEmailValidado(@RequestBody AtualizarEmailValidadoRequest request) {
 
-        AtualizarEmailValidadoMessage message = AtualizarEmailValidadoMessage.builder().build();
+        AtualizarEmailValidadoMessage message = AtualizarEmailValidadoMessage.builder()
+            .numeroProposta(request.getNumeroProposta())
+            .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
             Messaging.ATUALIZAR_EMAIL_VALIDADO.getExchange(),
@@ -79,11 +109,17 @@ public class AppController {
 
         AnalisarPosPropostaMessage message = AnalisarPosPropostaMessage.builder()
             .cpf(request.getCpf())
-            .numeroProposta(request.getNumeroProposta()).build();
+            .numeroProposta(request.getNumeroProposta())
+            .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
             Messaging.ANALISAR_POS_PROPOSTA.getExchange(),
             Messaging.ANALISAR_POS_PROPOSTA.getRoutingKey(),
             message);
+    }
+
+    @GetMapping("/{numero}")
+    public Proposta buscarProposta(@PathVariable Long numero) {
+        return repository.findByNumero(numero).orElse(null);
     }
 }
