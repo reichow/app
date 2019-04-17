@@ -22,7 +22,6 @@ import br.com.camila.app.domain.TipoProposta;
 import br.com.camila.app.interceptor.HeaderMessageInterceptor;
 import br.com.camila.app.interceptor.TraceMessageInterceptor;
 import br.com.camila.app.message.AnalisarPosPropostaMessage;
-import br.com.camila.app.message.AnalisarPrePropostaMcMessage;
 import br.com.camila.app.message.AnalisarPrePropostaMessage;
 import br.com.camila.app.message.AtualizarEmailValidadoMessage;
 import br.com.camila.app.message.AtualizarInfosPessoaisMessage;
@@ -64,7 +63,6 @@ public class RabbitTemplateConfiguration {
             AtualizarEmailValidadoMessage.class,
             AtualizarInfosPessoaisMessage.class,
             AnalisarPosPropostaMessage.class,
-            AnalisarPrePropostaMcMessage.class,
             TipoProposta.class
             )
             .forEach(clazz -> mapping.put(clazz.getSimpleName(), clazz));

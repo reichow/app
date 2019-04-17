@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.camila.app.annotation.EventTemplate;
 import br.com.camila.app.entity.Proposta;
 import br.com.camila.app.message.AnalisarPosPropostaMessage;
-import br.com.camila.app.message.AnalisarPrePropostaMcMessage;
 import br.com.camila.app.message.AnalisarPrePropostaMessage;
 import br.com.camila.app.message.AtualizarEmailValidadoMessage;
 import br.com.camila.app.message.AtualizarInfosPessoaisMessage;
@@ -20,7 +19,6 @@ import br.com.camila.app.message.CriarPropostaMessage;
 import br.com.camila.app.messaging.Messaging;
 import br.com.camila.app.repository.PropostaRepository;
 import br.com.camila.app.request.AnalisarPosPropostaRequest;
-import br.com.camila.app.request.AnalisarPrePropostaMcRequest;
 import br.com.camila.app.request.AnalisarPrePropostaRequest;
 import br.com.camila.app.request.AtualizarEmailValidadoRequest;
 import br.com.camila.app.request.AtualizarInfosPessoaisRequest;
@@ -61,20 +59,6 @@ public class AppController {
         eventTemplate.convertAndSend(
             Messaging.ANALISAR_PRE_PROPOSTA.getExchange(),
             Messaging.ANALISAR_PRE_PROPOSTA.getRoutingKey(),
-            message);
-    }
-
-    @PostMapping("/analisa-pre-proposta-mc")
-    public void analisarPrePropostaMc(@RequestBody AnalisarPrePropostaMcRequest request) {
-
-        AnalisarPrePropostaMcMessage message = AnalisarPrePropostaMcMessage.builder()
-            .cpf(request.getCpf())
-            .numeroProposta(request.getNumeroProposta())
-            .proposta(request.getProposta()).build();
-
-        eventTemplate.convertAndSend(
-            Messaging.ANALISAR_PRE_PROPOSTA_MC.getExchange(),
-            Messaging.ANALISAR_PRE_PROPOSTA_MC.getRoutingKey(),
             message);
     }
 
