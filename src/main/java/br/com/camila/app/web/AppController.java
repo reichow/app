@@ -53,8 +53,8 @@ public class AppController {
 
         AnalisarPrePropostaMessage message = AnalisarPrePropostaMessage.builder()
             .cpf(request.getCpf())
-            .numeroProposta(request.getNumeroProposta())
-            .proposta(request.getProposta()).build();
+            .numeroProposta(request.getNumeroProposta()).build();
+//            .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
             Messaging.ANALISAR_PRE_PROPOSTA.getExchange(),
