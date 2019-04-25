@@ -24,8 +24,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Proposta {
 
-    private static final String SEQUENCE = "PROPOSTA_SEQ";
-
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "ID_PROPOSTA", nullable = false, precision = 10)

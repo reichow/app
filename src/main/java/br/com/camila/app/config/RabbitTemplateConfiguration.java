@@ -18,14 +18,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.camila.app.annotation.EventTemplate;
 import br.com.camila.app.annotation.RabbitEnabled;
-import br.com.camila.app.domain.TipoProposta;
+import br.com.camila.app.domain.Tipo;
 import br.com.camila.app.interceptor.HeaderMessageInterceptor;
 import br.com.camila.app.interceptor.TraceMessageInterceptor;
-import br.com.camila.app.message.AnalisarPosPropostaMessage;
-import br.com.camila.app.message.AnalisarPrePropostaMessage;
+import br.com.camila.app.message.AnalisarPosMessage;
+import br.com.camila.app.message.AnalisarPreMessage;
 import br.com.camila.app.message.AtualizarEmailValidadoMessage;
 import br.com.camila.app.message.AtualizarInfosPessoaisMessage;
-import br.com.camila.app.message.CriarPropostaMessage;
+import br.com.camila.app.message.CriarMessage;
 import br.com.camila.app.messaging.MessageOutbox;
 import br.com.camila.app.messaging.Messaging;
 
@@ -58,12 +58,12 @@ public class RabbitTemplateConfiguration {
 
         final Map<String, Class<?>> mapping = new HashMap<>();
         asList(
-            CriarPropostaMessage.class,
-            AnalisarPrePropostaMessage.class,
+            CriarMessage.class,
+            AnalisarPreMessage.class,
             AtualizarEmailValidadoMessage.class,
             AtualizarInfosPessoaisMessage.class,
-            AnalisarPosPropostaMessage.class,
-            TipoProposta.class
+            AnalisarPosMessage.class,
+            Tipo.class
             )
             .forEach(clazz -> mapping.put(clazz.getSimpleName(), clazz));
 

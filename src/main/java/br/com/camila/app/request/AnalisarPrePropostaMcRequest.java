@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import br.com.camila.app.domain.TipoProposta;
+import br.com.camila.app.domain.Tipo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,5 +23,5 @@ public class AnalisarPrePropostaMcRequest implements Serializable {
 
     private Long numeroProposta;
 
-    private TipoProposta proposta;
+    private Tipo proposta;
 }

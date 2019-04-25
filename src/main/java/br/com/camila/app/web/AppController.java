@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.camila.app.annotation.EventTemplate;
 import br.com.camila.app.entity.Proposta;
-import br.com.camila.app.message.AnalisarPosPropostaMessage;
-import br.com.camila.app.message.AnalisarPrePropostaMessage;
+import br.com.camila.app.message.AnalisarPosMessage;
+import br.com.camila.app.message.AnalisarPreMessage;
 import br.com.camila.app.message.AtualizarEmailValidadoMessage;
 import br.com.camila.app.message.AtualizarInfosPessoaisMessage;
-import br.com.camila.app.message.CriarPropostaMessage;
+import br.com.camila.app.message.CriarMessage;
 import br.com.camila.app.messaging.Messaging;
-import br.com.camila.app.repository.PropostaRepository;
+import br.com.camila.app.repository.PropRepository;
 import br.com.camila.app.request.AnalisarPosPropostaRequest;
 import br.com.camila.app.request.AnalisarPrePropostaRequest;
 import br.com.camila.app.request.AtualizarEmailValidadoRequest;
@@ -33,32 +33,32 @@ public class AppController {
     private RabbitTemplate eventTemplate;
 
     @Autowired
-    private PropostaRepository repository;
+    private PropRepository repository;
 
     @PostMapping("/cria-proposta")
     public void criarProposta(@RequestBody CriarPropostaRequest request) {
 
-        CriarPropostaMessage message = CriarPropostaMessage.builder()
+        CriarMessage message = CriarMessage.builder()
             .cpf(request.getCpf())
             .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
-            Messaging.CRIAR_PROPOSTA.getExchange(),
-            Messaging.CRIAR_PROPOSTA.getRoutingKey(),
+            Messaging.CRIAR.getExchange(),
+            Messaging.CRIAR.getRoutingKey(),
             message);
     }
 
     @PostMapping("/analisa-pre-proposta")
     public void analisarPreProposta(@RequestBody AnalisarPrePropostaRequest request) {
 
-        AnalisarPrePropostaMessage message = AnalisarPrePropostaMessage.builder()
+        AnalisarPreMessage message = AnalisarPreMessage.builder()
             .cpf(request.getCpf())
             .numeroProposta(request.getNumeroProposta()).build();
 //            .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
-            Messaging.ANALISAR_PRE_PROPOSTA.getExchange(),
-            Messaging.ANALISAR_PRE_PROPOSTA.getRoutingKey(),
+            Messaging.ANALISAR_PRE.getExchange(),
+            Messaging.ANALISAR_PRE.getRoutingKey(),
             message);
     }
 
@@ -91,14 +91,14 @@ public class AppController {
     @PostMapping("/analisa-pos-proposta")
     public void analisarPosProposta(@RequestBody AnalisarPosPropostaRequest request) {
 
-        AnalisarPosPropostaMessage message = AnalisarPosPropostaMessage.builder()
+        AnalisarPosMessage message = AnalisarPosMessage.builder()
             .cpf(request.getCpf())
             .numeroProposta(request.getNumeroProposta())
             .proposta(request.getProposta()).build();
 
         eventTemplate.convertAndSend(
-            Messaging.ANALISAR_POS_PROPOSTA.getExchange(),
-            Messaging.ANALISAR_POS_PROPOSTA.getRoutingKey(),
+            Messaging.ANALISAR_POS.getExchange(),
+            Messaging.ANALISAR_POS.getRoutingKey(),
             message);
     }
 
